@@ -8,49 +8,60 @@ typedef struct no{
     struct no *proximo;
 }No;
 
-//metodo pra inserir no inicio
+typedef struct{
+    No * inicio;
+    int tam; 
+}Lista;
 
-void inserir_inicio(No ** lista, int num){
+void criar_lista(Lista *lista){
+    lista->inicio = NULL;
+    lista->tam = 0;
+}
+
+//metodo pra inserir no inicio
+void inserir_inicio(Lista * lista, int num){
     No *novo =(No*)malloc(sizeof(No));
     if(novo){
         novo->valor = num;
-        novo->proximo = *lista;
-        *lista = novo;
+        novo->proximo = lista->inicio;
+        lista->inicio = novo;
+        lista->tam++;
     }
     else 
         printf("erro ao alocar!\n");
 }
-void inserir_fim(No ** lista, int num){
+void inserir_fim(Lista *lista, int num){
     No *aux, *novo = malloc(sizeof(No));
     if(novo){
         novo->valor = num;
         novo->proximo = NULL;
 
         //é o primeiro
-        if(*lista == NULL){
-            *lista = novo;
+        if(lista->inicio == NULL){
+            lista->inicio = novo;
         }else{
-            aux = *lista;
+            aux = lista->inicio;
             while(aux->proximo){
                 aux = aux->proximo;
             }
             aux->proximo = novo;
         }
+        lista->tam++;
     }
     else 
         printf("erro ao alocar!\n");
 }
 
-void inserir_no_meio(No **lista, int num,int  anterior){
+void inserir_no_meio(Lista *lista, int num,int  anterior){
     No *aux,*novo = malloc(sizeof(No));
     if(novo){
         novo->valor = num;
         //é o primeiro ? 
-        if(*lista == NULL){
+        if(lista->inicio == NULL){
             novo->proximo = NULL;
-            *lista = novo;
+            lista->inicio = novo;
         }else{
-            aux = *lista;
+            aux = lista->inicio;
             while(aux->valor != anterior && aux->proximo){
                 aux = aux->proximo;
             }
@@ -58,25 +69,33 @@ void inserir_no_meio(No **lista, int num,int  anterior){
             aux->proximo = novo; 
         
         }
+        lista->tam++;
         
     }
     else printf("Erro ao alocar memoria!!!");
 }
 
-void imprimindo_lista(No *lista){
-
-    printf("\nLista: ");
-    while(lista){
-        printf("%d ",lista->valor);
-        lista = lista->proximo;
+void imprimindo_lista(Lista lista){
+    No *no = lista.inicio;
+    printf("\nLista tem: %d elemetnos\n ",lista.tam);
+    while(no){
+        printf("%d ",no->valor);
+        no = no->proximo;
 
     }   
     printf("\n\n");
 }
+
+void inserirOrdenado(){
+    
+}
 int main(){
     
     int opc,valor, aux;
-    No *lista = NULL;
+    // No *lista = NULL;
+    Lista  lista;
+    criar_lista(&lista);
+
     do{
         printf("\n\t 0 - sair\n\t 1 - InserirI \n\t 2 - INSERIRF\n\t 3 - INSERIRM\n\t 4 - Imprimir\n\n");
         scanf("%d",&opc);
