@@ -85,19 +85,99 @@ void imprimindo_lista(Lista lista){
     }   
     printf("\n\n");
 }
+//lista so com nos
+void inserirOrdenado(No **lista, int num){
+    No *aux,*novo = (No*)malloc(sizeof(No));
+    if(novo){
+        novo->valor = num;
+        // A lista está vazia
+        if(*lista == NULL){
+            novo->proximo = NULL;
+            *lista = novo;
+        }
+        //é  o menor ?
+        else if(novo->valor < (*lista)->valor){
+            novo->proximo = *lista;
+            *lista = novo;
+        }
+        else{
+            aux = *lista;
+            while(aux->proximo && novo->valor > aux->proximo->valor){
+                aux = aux->proximo;
+            }
+            novo->proximo = aux->proximo;
+            aux->proximo = novo;
+        }
+    }
+}
+void imprimindoLista(No *lista){
 
-void inserirOrdenado(){
-    
+    printf("\nLista: ");
+    while(lista){
+        printf("%d ",lista->valor);
+        lista = lista->proximo;
+
+    }   
+    printf("\n\n");
+}
+
+void inserindo_ordenado(Lista * lista, int num){
+    No * novo, *aux = (No*)malloc(sizeof(No));
+    if(novo){
+        novo->valor = num;
+        if(lista->inicio == NULL){
+            novo->proximo = NULL;
+            lista->inicio = novo;
+           
+        }
+        else if(novo->valor > lista->inicio->valor){
+            novo->proximo = lista->inicio;
+            lista->inicio = novo;
+            
+        }else{
+            aux = lista->inicio;
+            if(aux->proximo && aux->proximo->valor < novo->valor){
+                aux = aux->proximo;
+            }
+            novo->proximo = aux->proximo;
+            aux->proximo = novo;
+
+        }
+    }
+     lista->tam++;
+}
+No * remover (Lista *lista, int num){
+    No *remover,*aux = NULL;
+    if(lista->inicio){
+        if(lista->inicio->valor == num){
+            remover = lista->inicio;
+            lista->inicio = remover->proximo;
+            lista->tam--;
+        }else{
+            aux = lista->inicio;
+            while(aux->proximo && aux->proximo->valor != num){
+                aux = aux->proximo;
+            }
+            if(aux->proximo){
+                remover = aux->proximo;
+                aux->proximo = remover->proximo;
+                lista->tam--;
+            }
+        }
+    }
+
+    return remover;
 }
 int main(){
     
     int opc,valor, aux;
-    // No *lista = NULL;
+     No *lista1 = NULL;
     Lista  lista;
+     ;
     criar_lista(&lista);
 
     do{
-        printf("\n\t 0 - sair\n\t 1 - InserirI \n\t 2 - INSERIRF\n\t 3 - INSERIRM\n\t 4 - Imprimir\n\n");
+        printf("\n\t 0 - sair\n\t 1 - InserirI \n\t 2 - INSERIRF\n\t 3 - INSERIRM\n\t 4 - Imprimir\n\t 5 - Inserir ordenado\n\n");
         scanf("%d",&opc);
 
         switch (opc)
@@ -118,8 +198,15 @@ int main(){
             inserir_no_meio(&lista, valor,aux);
             break;
         case 4:
+            //imprimindoLista(lista1);
             imprimindo_lista(lista);
-            break;    
+            break; 
+        case 5:
+            printf("Digite um valor: ");
+            scanf("%d",&valor);
+            inserindo_ordenado(&lista, valor);
+            
+            break;   
         default:
             if(opc != 0)
                 printf("opcao invalida!\n");
